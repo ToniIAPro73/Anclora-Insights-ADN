@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-metallic-gold: #F59E0B;
+  --color-muted-gold: #D97706;
+  --color-ink-black: #0F172A;
+  --color-paper-cream: #F8FAFC;
+  
+  --font-serif: "Libre Baskerville", "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  transition: background-color 0.5s ease, color 0.5s ease;
+  font-family: var(--font-sans);
+}
+
+/* Custom smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(224, 176, 100, 0.2);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(224, 176, 100, 0.4);
+}

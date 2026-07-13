@@ -1,0 +1,484 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { Copy, Check, Type, AlertCircle, Info, ArrowUpRight } from "lucide-react";
+import { ColorSwatch, LogoVariation, FontSpecimen, EditorialGuideline } from "../types";
+
+interface BrandBookProps {
+  darkMode: boolean;
+}
+
+const colorSwatches: ColorSwatch[] = [
+  {
+    name: "Oro Metálico (Metallic Gold)",
+    hex: "#F59E0B",
+    rgb: "245, 158, 11",
+    cmyk: "0, 35, 96, 4",
+    usage: "Usado para acentos de alta jerarquía, firmas, llamadas a la acción, líneas decorativas y símbolos destacados.",
+    type: "primary"
+  },
+  {
+    name: "Negro Tinta (Ink Black)",
+    hex: "#0F172A",
+    rgb: "15, 23, 42",
+    cmyk: "64, 45, 0, 84",
+    usage: "Base estructural, tipografía principal en modo claro y fondo inmersivo en modo oscuro.",
+    type: "secondary"
+  },
+  {
+    name: "Crema Papel (Paper Cream)",
+    hex: "#F8FAFC",
+    rgb: "248, 250, 252",
+    cmyk: "2, 1, 0, 1",
+    usage: "Color de fondo principal en modo claro. Aporta tactilidad y reduce la fatiga visual digital.",
+    type: "neutral"
+  },
+  {
+    name: "Oro Mitigado (Muted Gold)",
+    hex: "#D97706",
+    rgb: "217, 119, 6",
+    cmyk: "0, 45, 97, 15",
+    usage: "Sub-acentos, bordes secundarios, etiquetas secundarias o estados de interacción hover.",
+    type: "support"
+  }
+];
+
+const logoVariations: LogoVariation[] = [
+  {
+    id: "main-lockup",
+    name: "Logo Lockup Principal",
+    description: "La combinación horizontal de nuestro sello 'Medalla' y la tipografía serif elegante. Perfectamente equilibrado.",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDu3KOkKiYeyBkudz0L5FKJe6E0aFx1_-fCBe133nCbxyyq34r9l-YqzF26t1iCrlGSOhEZTMlUX0zgqnYTDGQGlGbR4KThmHFncRKGmZuowFwoj5OBVGCnhR84FoEnFhMiOSzEta3lOy7EhIMZLbnbhnwViLIIz__ehnWUSYiKhjgy3-yRVqkG6bCMbCkfnpWZr6dOu8zzbwz-T83j80GQn7jgj-ArE4uTXr3Qczh5btQfuSBos6dr7zfnEinZsa3ln7lEJmcVTfLZ",
+    recommendedUse: "Cabeceras de sitios web, portadas de informes, material de prensa oficial y papelería corporativa premium.",
+    bgColorClass: "bg-white border border-metallic-gold/10"
+  },
+  {
+    id: "gold-medal",
+    name: "Símbolo: La Medalla",
+    description: "Sello circular representativo con un ancla heráldica abstracta y la estrella del conocimiento en oro metálico.",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCRJtJ2ouKuW3IROCUe1u6u5lzcZTGBLZpIW1Aqj_zP1nwU5ttmyYVb1sJ8NJ3Hgv4CAsJLa4nkCRsHas3gmtgkx_pP8OH7IioUUri-3Uawq4jZr89kY1RDJA8YVXRFG1ecwSgdDs59xuFuFcUul-J5o5Pl3Nj1Ya5ZqkP2HAyJ4e0wqHCVX7puAkiExwNUTSlNoTDVipaFckNlLFnvGNPUtLWu-afFCkjUU3htrMq5ToGo2uonesP2LL0XUqcPFfvzTIRxUE1VlTcf",
+    recommendedUse: "Perfiles de redes sociales, contraportadas, marcas de agua, y elementos circulares físicos.",
+    bgColorClass: "bg-[#0F172A]"
+  },
+  {
+    id: "solid-inverse",
+    name: "Símbolo Inverso / Sólido",
+    description: "Versión de alto contraste del símbolo principal, optimizada para aplicaciones sobre fondos dorados o de color continuo.",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuCn4Nu3d_g0ocnasxvHSR1J-KBfol57dBwcCoz542gkpPJ5bTjD2PUIIW4TbHdfKpQNZCR6r3EpNcRGy28RKf5tEBjYc8CtaMOkXpL9YGj2YOBx1jLOzqmS6YSTWZAjtY8xrG6DWLSj6SOVkLS7K3OyGQaWurr7kKESTrkxQcFPNHps7w6DlpdlvCi6Fjh8MapThYEnwkXXcCr7foACfr5oOIo0GYvyHswhJjtvVgQRUqSFgzA5p17V1gHSvCS--sYMVEvOWMw8oX5f",
+    recommendedUse: "Estampados físicos, impresión a un solo color, sellos de lacre, y texturas de fondo.",
+    bgColorClass: "bg-[#F59E0B]"
+  },
+  {
+    id: "favicon-app",
+    name: "Sello Favicon & App Icon",
+    description: "La expresión mínima del logotipo en formato cuadrado de bordes suaves, ideal para interfaces web y móviles.",
+    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuBB0Jkwa4H5-ygU_qx29MDcUUzlsxmZzMGySRkz1plgHBpzYTUswAaVYqC8Kuk7g6wtw4W23WAubA2i2SyQI-5DNLS7fwGrYL0w9bucGMlU-Jy2i7Hh-eh05GXijP4Ap-0jTR747PWFj1FWf6ocSoFckoeHXnbGKjuli7ie7A482QXYQOUW6PV1iJzb_0TRwa1Ua0LFTUyT2hXTFgrY56ezXidhS7tWJBChHneVlDzTt6BlNvlMHHiDWmARUDlKha-6WD71EbMKbKtl",
+    recommendedUse: "Pestaña de navegador (favicon), iconos de aplicación móvil, accesos directos de escritorio.",
+    bgColorClass: "bg-stone-100 border"
+  }
+];
+
+const fontSpecimens: FontSpecimen[] = [
+  {
+    name: "Tipografía de Titulares (Display)",
+    family: "Libre Baskerville",
+    weight: "400 & Regular Italic",
+    size: "40px - 64px",
+    lineHeight: "1.2",
+    description: "Una tipografía serif con un profundo peso histórico y literario. Sus remates elegantes y alto contraste de trazos transmiten autoridad intelectual e invitan a una lectura reflexiva.",
+    exampleText: "La Curaduría del Conocimiento"
+  },
+  {
+    name: "Tipografía de Cuerpo (San Serif)",
+    family: "Inter",
+    weight: "400 (Regular) & 600 (Semibold)",
+    size: "16px - 18px",
+    lineHeight: "1.6",
+    description: "Una tipografía sans-serif moderna y geométrica con detalles humanistas. Diseñada para mantener una legibilidad absoluta en textos largos en pantallas, reduciendo la fatiga cognitiva del lector.",
+    exampleText: "Investigaciones detalladas y análisis estratégicos de alta autoridad intelectual."
+  }
+];
+
+const editorialGuidelines: EditorialGuideline[] = [
+  {
+    term: "El nuevo post de nuestro blog corporativo...",
+    replacement: "La última entrega de nuestro cuaderno de análisis...",
+    why: "Evitamos la terminología genérica y de masas ('post', 'blog') para elevar el formato al de una publicación editorial de prestigio ('entrega', 'cuaderno de análisis').",
+    category: "forbidden"
+  },
+  {
+    term: "¡Hacer click aquí ya mismo!",
+    replacement: "Explorar el análisis completo.",
+    why: "El uso de imperativos agresivos, exclamaciones e inmediatez comercial destruye la calidez y el sosiego intelectual de la marca.",
+    category: "forbidden"
+  },
+  {
+    term: "Contenido, información, posts.",
+    replacement: "Narrativas, ensayos, insights, curaduría.",
+    why: "El 'contenido' se consume; las 'narrativas' se comprenden. Buscamos posicionar cada lectura como una pieza de gran valor intelectual.",
+    category: "recommended"
+  },
+  {
+    term: "Rápido, instantáneo, fácil.",
+    replacement: "Sintético, estructurado, profundo.",
+    why: "No vendemos soluciones milagrosas ni inmediatez. Ofrecemos síntesis brillante y rigor estratégico para ahorrar tiempo real al lector.",
+    category: "recommended"
+  }
+];
+
+export default function BrandBook({ darkMode }: BrandBookProps) {
+  const [copiedColor, setCopiedColor] = useState<string | null>(null);
+  const [customText, setCustomText] = useState<string>("");
+  const [selectedLogo, setSelectedLogo] = useState<string>("main-lockup");
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedColor(text);
+    setTimeout(() => setCopiedColor(null), 2000);
+  };
+
+  const activeLogoData = logoVariations.find(v => v.id === selectedLogo) || logoVariations[0];
+
+  return (
+    <div className="space-y-24">
+      {/* Logos & Variations */}
+      <div className="space-y-12">
+        <div className="space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-metallic-gold font-semibold block">
+            Identidad Visual
+          </span>
+          <h3 className={`font-serif text-3xl md:text-4xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+            Arquitectura de Logotipos
+          </h3>
+          <p className={`max-w-2xl text-sm md:text-base ${darkMode ? "text-paper-cream/70" : "text-on-surface-variant"}`}>
+            Nuestro logotipo encarna la dualidad entre la tradición de la imprenta clásica y la agilidad estratégica contemporánea. 
+            Utiliza una abstracción de un ancla integrada en un sello heráldico tradicional.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+          {/* Left Selector List */}
+          <div className="lg:col-span-4 flex flex-col gap-3">
+            {logoVariations.map((v) => (
+              <button
+                key={v.id}
+                onClick={() => setSelectedLogo(v.id)}
+                className={`p-5 text-left border rounded-lg transition-all duration-300 flex flex-col justify-between ${
+                  selectedLogo === v.id
+                    ? darkMode
+                      ? "bg-[#0F172A] border-metallic-gold text-paper-cream shadow-sm"
+                      : "bg-white border-metallic-gold text-ink-black shadow-sm"
+                    : darkMode
+                      ? "bg-transparent border-metallic-gold/15 text-paper-cream/60 hover:border-metallic-gold/30 hover:text-paper-cream"
+                      : "bg-transparent border-metallic-gold/10 text-on-surface-variant/70 hover:border-metallic-gold/25 hover:text-ink-black"
+                }`}
+              >
+                <div className="flex justify-between items-center w-full">
+                  <span className="font-serif text-base font-semibold">{v.name}</span>
+                  <ArrowUpRight className={`w-4 h-4 transition-transform duration-300 ${
+                    selectedLogo === v.id ? "translate-x-0.5 -translate-y-0.5 text-metallic-gold" : "opacity-40"
+                  }`} />
+                </div>
+                <p className="text-xs mt-2 opacity-80 line-clamp-1">{v.description}</p>
+              </button>
+            ))}
+          </div>
+
+          {/* Right Visualizer Frame */}
+          <div className="lg:col-span-8 flex flex-col justify-between border rounded-xl overflow-hidden shadow-sm"
+               style={{ borderColor: darkMode ? "rgba(224, 176, 100, 0.15)" : "rgba(224, 176, 100, 0.12)" }}>
+            
+            {/* Visual Canvas */}
+            <div className={`flex-1 p-12 md:p-16 flex items-center justify-center transition-colors duration-500 ${activeLogoData.bgColorClass}`}>
+              <motion.img
+                key={activeLogoData.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+                alt={activeLogoData.name}
+                src={activeLogoData.url}
+                className="max-h-40 md:max-h-48 object-contain drop-shadow-sm select-none"
+              />
+            </div>
+
+            {/* Visual Parameters Table */}
+            <div className={`p-6 md:p-8 border-t ${
+              darkMode ? "bg-[#0F172A] border-metallic-gold/15 text-paper-cream" : "bg-white border-metallic-gold/10 text-ink-black"
+            }`}>
+              <div className="space-y-4">
+                <div>
+                  <h4 className="text-xs uppercase tracking-widest text-metallic-gold font-semibold">Uso Recomendado</h4>
+                  <p className="text-sm mt-1 opacity-95">{activeLogoData.recommendedUse}</p>
+                </div>
+                <div className="grid grid-cols-2 gap-4 border-t border-metallic-gold/10 pt-4 text-xs">
+                  <div>
+                    <span className="opacity-60 block">Área de Seguridad</span>
+                    <span className="font-semibold mt-0.5 block">1x Altura de 'A' Mayúscula</span>
+                  </div>
+                  <div>
+                    <span className="opacity-60 block">Tamaño Mínimo Recomendado</span>
+                    <span className="font-semibold mt-0.5 block">Impresión: 25mm | Digital: 120px</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Color Palette Bento Swatches */}
+      <div className="space-y-12">
+        <div className="space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-metallic-gold font-semibold block">
+            Cromatismo Editorial
+          </span>
+          <h3 className={`font-serif text-3xl md:text-4xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+            Paleta de Colores Exclusiva
+          </h3>
+          <p className={`max-w-2xl text-sm md:text-base ${darkMode ? "text-paper-cream/70" : "text-on-surface-variant"}`}>
+            La tríada fundamental de Anclora Insights se inspira en el papel premium, la tinta densa y los grabados de metal noble. 
+            Haz clic en cualquier color para copiar su código hexadecimal.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+          {colorSwatches.map((color) => {
+            const isCopied = copiedColor === color.hex;
+            return (
+              <motion.div
+                key={color.hex}
+                whileHover={{ y: -6 }}
+                onClick={() => copyToClipboard(color.hex)}
+                className={`border rounded-xl overflow-hidden cursor-pointer shadow-sm relative group flex flex-col justify-between h-full ${
+                  darkMode ? "bg-[#0F172A] border-metallic-gold/15" : "bg-white border-metallic-gold/10"
+                }`}
+              >
+                <div>
+                  {/* Visual Color Block */}
+                  <div className="h-40 relative" style={{ backgroundColor: color.hex }}>
+                    <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="bg-black/40 text-white text-xs px-3 py-1.5 rounded backdrop-blur-sm flex items-center gap-1">
+                        {isCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                        {isCopied ? "¡Copiado!" : "Copiar HEX"}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Info Card */}
+                  <div className="p-6 space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className={`font-serif text-lg leading-tight font-semibold ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+                          {color.name}
+                        </h4>
+                        <span className="text-xs text-metallic-gold font-semibold uppercase tracking-wider block mt-1">
+                          {color.type}
+                        </span>
+                      </div>
+                    </div>
+                    <p className={`text-xs md:text-sm leading-relaxed ${darkMode ? "text-paper-cream/75" : "text-on-surface-variant"}`}>
+                      {color.usage}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Values Footer */}
+                <div className={`p-4 border-t ${
+                  darkMode ? "bg-black/20 border-metallic-gold/10 text-paper-cream/80" : "bg-stone-50 border-metallic-gold/10 text-ink-black/80"
+                } text-xs font-mono grid grid-cols-2 gap-2`}>
+                  <div>
+                    <span className="opacity-50 text-[10px] block">HEX</span>
+                    <span className="font-semibold block">{color.hex}</span>
+                  </div>
+                  <div>
+                    <span className="opacity-50 text-[10px] block">RGB</span>
+                    <span className="font-semibold block">{color.rgb}</span>
+                  </div>
+                  <div className="col-span-2 border-t border-metallic-gold/10 pt-2">
+                    <span className="opacity-50 text-[10px] block">CMYK</span>
+                    <span className="font-semibold block">{color.cmyk}</span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Typography Specimens & Dynamic Testing */}
+      <div className="space-y-12">
+        <div className="space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-metallic-gold font-semibold block">
+            Tipografías de la Edición
+          </span>
+          <h3 className={`font-serif text-3xl md:text-4xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+            Sistemas Tipográficos Alta Jerarquía
+          </h3>
+          <p className={`max-w-2xl text-sm md:text-base ${darkMode ? "text-paper-cream/70" : "text-on-surface-variant"}`}>
+            Nuestra jerarquía visual se basa en una dualidad clásica-contemporánea: Libre Caslon Text para una voz literaria 
+            y Manrope para una interfaz fluida e impecablemente legible.
+          </p>
+        </div>
+
+        {/* Specimens cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {fontSpecimens.map((specimen, idx) => (
+            <div
+              key={idx}
+              className={`p-8 md:p-10 border rounded-xl flex flex-col justify-between ${
+                darkMode ? "bg-[#0F172A] border-metallic-gold/15 text-paper-cream" : "bg-white border-metallic-gold/10 text-ink-black"
+              } shadow-sm`}
+            >
+              <div className="space-y-6">
+                <div className="flex justify-between items-center border-b border-metallic-gold/10 pb-4">
+                  <span className="text-xs uppercase tracking-widest text-metallic-gold font-semibold">
+                    {specimen.name}
+                  </span>
+                  <span className="text-xs font-mono opacity-60">
+                    {specimen.weight}
+                  </span>
+                </div>
+
+                <div className="py-6">
+                  {/* Styled Render based on font family */}
+                  <p 
+                    style={{ fontFamily: specimen.family }}
+                    className={`${specimen.family === "Libre Caslon Text" ? "font-serif text-3xl md:text-4xl italic" : "font-sans text-xl md:text-2xl font-normal"} leading-snug`}
+                  >
+                    {customText || specimen.exampleText}
+                  </p>
+                </div>
+
+                <p className={`text-xs md:text-sm leading-relaxed ${darkMode ? "text-paper-cream/80" : "text-on-surface-variant"}`}>
+                  {specimen.description}
+                </p>
+              </div>
+
+              <div className="mt-8 border-t border-metallic-gold/10 pt-4 grid grid-cols-2 gap-4 text-xs font-mono opacity-80">
+                <div>
+                  <span className="opacity-60 block">Familia</span>
+                  <span className="font-semibold block">{specimen.family}</span>
+                </div>
+                <div>
+                  <span className="opacity-60 block">Interlineado</span>
+                  <span className="font-semibold block">{specimen.lineHeight}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Dynamic testing input */}
+        <div className={`p-6 border rounded-lg ${
+          darkMode ? "bg-slate-950/40 border-metallic-gold/20" : "bg-white border-metallic-gold/15"
+        }`}>
+          <div className="flex flex-col md:flex-row items-center gap-4">
+            <div className="w-10 h-10 rounded-full bg-metallic-gold/10 flex items-center justify-center shrink-0">
+              <Type className="w-5 h-5 text-metallic-gold" />
+            </div>
+            <div className="flex-1 w-full">
+              <label htmlFor="font-tester" className={`text-xs font-semibold block mb-1 ${darkMode ? "text-paper-cream/70" : "text-ink-black/70"}`}>
+                Banco de Pruebas Tipográfico
+              </label>
+              <input
+                id="font-tester"
+                type="text"
+                placeholder="Escribe tus propias palabras aquí para ver cómo se renderizan..."
+                value={customText}
+                onChange={(e) => setCustomText(e.target.value)}
+                className={`w-full bg-transparent border-b outline-none text-base py-1 ${
+                  darkMode 
+                    ? "border-metallic-gold/30 text-paper-cream focus:border-metallic-gold" 
+                    : "border-metallic-gold/20 text-ink-black focus:border-metallic-gold"
+                } transition-colors`}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Editorial Guidelines & Copywriting Rules */}
+      <div className="space-y-12">
+        <div className="space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-metallic-gold font-semibold block">
+            Guía de Redacción
+          </span>
+          <h3 className={`font-serif text-3xl md:text-4xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+            Directrices de Voz Editorial
+          </h3>
+          <p className={`max-w-2xl text-sm md:text-base ${darkMode ? "text-paper-cream/70" : "text-on-surface-variant"}`}>
+            Nuestra voz es el embajador intelectual de Anclora Insights. Elevamos el tono, eliminamos el sensacionalismo corporativo 
+            y adoptamos la sobriedad como sinónimo de prestigio.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Forbidden terms */}
+          <div className={`p-8 border rounded-xl space-y-6 ${
+            darkMode ? "bg-[#0F172A]/80 border-red-900/20" : "bg-white border-red-100"
+          }`}>
+            <div className="flex items-center gap-3 border-b border-red-500/10 pb-4">
+              <div className="w-8 h-8 rounded-full bg-red-500/10 flex items-center justify-center">
+                <AlertCircle className="w-4 h-4 text-red-500" />
+              </div>
+              <h4 className={`font-serif text-xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+                Usos no Recomendados
+              </h4>
+            </div>
+
+            <div className="space-y-6">
+              {editorialGuidelines.filter(g => g.category === "forbidden").map((g, i) => (
+                <div key={i} className="space-y-2 text-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <span className="line-through text-red-400 font-mono bg-red-500/5 px-2 py-0.5 rounded">
+                      {g.term}
+                    </span>
+                    <span className="text-xs opacity-50 hidden sm:block">Reemplazar por:</span>
+                    <span className="text-emerald-400 font-mono font-semibold bg-emerald-500/5 px-2 py-0.5 rounded">
+                      {g.replacement}
+                    </span>
+                  </div>
+                  <p className={`text-xs leading-relaxed opacity-80 ${darkMode ? "text-paper-cream/80" : "text-on-surface-variant"}`}>
+                    {g.why}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Recommended terms */}
+          <div className={`p-8 border rounded-xl space-y-6 ${
+            darkMode ? "bg-[#0F172A]/80 border-emerald-900/20" : "bg-white border-emerald-100"
+          }`}>
+            <div className="flex items-center gap-3 border-b border-emerald-500/10 pb-4">
+              <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                <Info className="w-4 h-4 text-emerald-500" />
+              </div>
+              <h4 className={`font-serif text-xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+                Expresiones Recomendadas
+              </h4>
+            </div>
+
+            <div className="space-y-6">
+              {editorialGuidelines.filter(g => g.category === "recommended").map((g, i) => (
+                <div key={i} className="space-y-2 text-sm">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <span className="line-through text-stone-400 font-mono opacity-50 bg-stone-500/5 px-2 py-0.5 rounded">
+                      {g.term}
+                    </span>
+                    <span className="text-xs opacity-50 hidden sm:block">Reemplazar por:</span>
+                    <span className="text-emerald-400 font-mono font-semibold bg-emerald-500/5 px-2 py-0.5 rounded">
+                      {g.replacement}
+                    </span>
+                  </div>
+                  <p className={`text-xs leading-relaxed opacity-80 ${darkMode ? "text-paper-cream/80" : "text-on-surface-variant"}`}>
+                    {g.why}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

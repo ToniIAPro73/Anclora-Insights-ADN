@@ -1,0 +1,6 @@
+{
+  "name": "Anclora Insights Brand Portal",
+  "description": "The official brand book, Business DNA, and AI Editorial Suite for Anclora Insights, premium imprint of Anclora Group.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
