@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { motion } from "motion/react";
-import { BookOpen, Compass, ShieldCheck, Award, Eye, Heart, Feather } from "lucide-react";
+import { BookOpen, Compass, ShieldCheck, Award, Eye, Heart, Feather, Download } from "lucide-react";
 import { BrandPillar } from "../types";
+import { generateBrandGuidelinesPDF } from "../lib/pdfGenerator";
 
 interface BusinessDNAProps {
   darkMode: boolean;
@@ -34,6 +36,23 @@ const pillars: BrandPillar[] = [
 ];
 
 export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState("");
+
+  const handleDownloadPDF = async () => {
+    try {
+      setIsGenerating(true);
+      await generateBrandGuidelinesPDF((progressText) => {
+        setGenerationProgress(progressText);
+      });
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsGenerating(false);
+      setGenerationProgress("");
+    }
+  };
+
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
       case "BookOpen": return <BookOpen className="w-6 h-6 text-metallic-gold" />;
@@ -71,6 +90,39 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
           Bajo la dirección de Anclora Group, nuestro sello editorial no busca la inmediatez, 
           sino la trascendencia de los datos analizados, devolviéndole al lector el recurso más valioso de todos: el tiempo.
         </p>
+
+        {/* PDF Download Button Trigger */}
+        <div className="flex flex-col items-center justify-center pt-6 gap-3">
+          <button
+            onClick={handleDownloadPDF}
+            disabled={isGenerating}
+            className={`px-6 py-3.5 rounded font-sans text-xs uppercase tracking-[0.2em] font-bold flex items-center gap-2.5 transition-all duration-300 shadow-md border cursor-pointer active:scale-95 ${
+              isGenerating
+                ? "bg-stone-800 text-stone-500 border-stone-700 cursor-not-allowed"
+                : darkMode
+                  ? "bg-metallic-gold text-ink-black border-metallic-gold hover:bg-muted-gold"
+                  : "bg-ink-black text-metallic-gold border-metallic-gold/30 hover:bg-[#0F172A]"
+            }`}
+          >
+            {isGenerating ? (
+              <>
+                <span className="animate-spin inline-block w-4 h-4 border-2 border-current border-t-transparent rounded-full"></span>
+                {generationProgress || "Generando..."}
+              </>
+            ) : (
+              <>
+                <Download className="w-4 h-4" />
+                Descargar Manual de Identidad (PDF)
+              </>
+            )}
+          </button>
+          
+          {isGenerating && (
+            <span className="text-[11px] font-mono text-metallic-gold animate-pulse">
+              Compilando tipografías, vectores y colores del manual...
+            </span>
+          )}
+        </div>
       </motion.div>
 
       {/* Mission & Vision Bento */}

@@ -5,6 +5,7 @@ import BusinessDNA from "./components/BusinessDNA";
 import BrandBook from "./components/BrandBook";
 import EditorialAssistant from "./components/EditorialAssistant";
 import ContrastChecker from "./components/ContrastChecker";
+import PrintBrandGuidelines from "./components/PrintBrandGuidelines";
 
 export default function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true);
@@ -103,14 +104,20 @@ export default function App() {
               legible y profundamente respetuoso con el intelecto de nuestros lectores.
             </p>
             <div className="flex flex-wrap gap-4 pt-2">
-              <button
+              <motion.button
                 onClick={() => setActiveTab("assistant")}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="px-5 py-2.5 text-xs font-sans font-semibold uppercase tracking-wider rounded bg-metallic-gold text-ink-black hover:bg-muted-gold transition-colors flex items-center gap-2 cursor-pointer"
               >
                 Probar Asistente Editorial AI <Sparkles className="w-3.5 h-3.5" />
-              </button>
-              <button
+              </motion.button>
+              <motion.button
                 onClick={() => setActiveTab("brandbook")}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className={`px-5 py-2.5 text-xs font-sans font-semibold uppercase tracking-wider rounded border transition-colors cursor-pointer ${
                   darkMode 
                     ? "border-metallic-gold/30 hover:bg-[#0F172A]" 
@@ -118,7 +125,7 @@ export default function App() {
                 }`}
               >
                 Explorar Paleta y Tipografía
-              </button>
+              </motion.button>
             </div>
           </div>
 
@@ -144,9 +151,12 @@ export default function App() {
             { id: "assistant", label: "Asistente Editorial AI" },
             { id: "legibilidad", label: "Auditoría de Legibilidad" }
           ].map((tab) => (
-            <button
+            <motion.button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 500, damping: 20 }}
               className={`pb-3.5 pt-1 px-4 text-xs font-sans uppercase tracking-[0.15em] font-semibold relative transition-all duration-300 cursor-pointer ${
                 activeTab === tab.id
                   ? "text-metallic-gold"
@@ -163,7 +173,7 @@ export default function App() {
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
-            </button>
+            </motion.button>
           ))}
         </div>
 
@@ -232,6 +242,7 @@ export default function App() {
           </div>
         </div>
       </footer>
+      <PrintBrandGuidelines idPrefix="print-brand-guidelines" />
     </div>
   );
 }

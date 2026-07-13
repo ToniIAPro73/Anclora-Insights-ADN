@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Copy, Check, Type, AlertCircle, Info, ArrowUpRight } from "lucide-react";
+import { Copy, Check, Type, AlertCircle, Info, ArrowUpRight, Search, ChevronDown, ChevronUp, BookMarked } from "lucide-react";
 import { ColorSwatch, LogoVariation, FontSpecimen, EditorialGuideline } from "../types";
 
 interface BrandBookProps {
@@ -125,10 +125,68 @@ const editorialGuidelines: EditorialGuideline[] = [
   }
 ];
 
+interface GlossaryItem {
+  term: string;
+  definition: string;
+  category: string;
+}
+
+const glossaryItems: GlossaryItem[] = [
+  {
+    term: "ADN de Negocio (Business DNA)",
+    definition: "El núcleo intelectual, estratégico y de propósito del sello editorial bajo Anclora Group. Rige todas las decisiones de diseño, curaduría y dirección, priorizando la permanencia física de las ideas en soportes digitales y el respeto reverencial por el tiempo de lectura.",
+    category: "Filosofía"
+  },
+  {
+    term: "Minimalismo Táctil (Tactile Minimalism)",
+    definition: "Estilo estético e interactivo que emula la calidez, textura y quietud de una edición clásica impresa. Se fundamenta en amplios espacios negativos, tipografías refinadas de titulares y micro-interacciones serenas, evitando la fatiga cognitiva del lector digital.",
+    category: "Diseño"
+  },
+  {
+    term: "Alta Autoridad Intelectual (High Authority)",
+    definition: "El estándar analítico de rigor absoluto aplicado a cada una de nuestras publicaciones. Proclama que todos los análisis estratégicos, datos y reflexiones se asientan sobre fuentes fidedignas primarias y un escrutinio racional imparcial.",
+    category: "Rigor"
+  },
+  {
+    term: "Curaduría Extrema (Extreme Curation)",
+    definition: "Metodología editorial de filtro drástico que prioriza la profundidad sintética ante la cantidad masiva. Cada entrega del catálogo es sometida a un riguroso análisis donde se descarta el ruido transitorio en pos de la relevancia conceptual.",
+    category: "Proceso"
+  },
+  {
+    term: "Prestigio Sobrio (Sober Prestige)",
+    definition: "Filosofía expresiva de nuestro tono de voz que prescinde de la hipérbole publicitaria, los imperativos estridentes, exclamaciones o clichés comerciales, utilizando en su lugar un tono conversacional sofisticado, maduro y certero.",
+    category: "Voz"
+  },
+  {
+    term: "Gobernanza de Identidad (Identity Governance)",
+    definition: "Conjunto de directrices formales, ortotipográficas y cromáticas diseñadas para vigilar y resguardar la consistencia íntegra del sello editorial Anclora Insights en todas sus manifestaciones impresas, corporativas o digitales.",
+    category: "Estructura"
+  }
+];
+
 export default function BrandBook({ darkMode }: BrandBookProps) {
   const [copiedColor, setCopiedColor] = useState<string | null>(null);
   const [customText, setCustomText] = useState<string>("");
   const [selectedLogo, setSelectedLogo] = useState<string>("main-lockup");
+  const [glossarySearch, setGlossarySearch] = useState("");
+  const [expandedGlossaryItems, setExpandedGlossaryItems] = useState<Record<string, boolean>>({});
+  const [selectedGlossaryCategory, setSelectedGlossaryCategory] = useState<string>("all");
+
+  const toggleGlossaryItem = (term: string) => {
+    setExpandedGlossaryItems(prev => ({
+      ...prev,
+      [term]: !prev[term]
+    }));
+  };
+
+  const glossaryCategories = ["all", ...Array.from(new Set(glossaryItems.map(item => item.category)))];
+
+  const filteredGlossaryItems = glossaryItems.filter(item => {
+    const matchesSearch = item.term.toLowerCase().includes(glossarySearch.toLowerCase()) || 
+                          item.definition.toLowerCase().includes(glossarySearch.toLowerCase());
+    const matchesCategory = selectedGlossaryCategory === "all" || item.category === selectedGlossaryCategory;
+    return matchesSearch && matchesCategory;
+  });
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -477,6 +535,171 @@ export default function BrandBook({ darkMode }: BrandBookProps) {
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Brand Glossary Section */}
+      <div id="brand-glossary-section" className="space-y-12 mt-24 pt-16 border-t border-metallic-gold/10">
+        <div className="space-y-4">
+          <span className="text-xs uppercase tracking-[0.3em] text-metallic-gold font-semibold block">
+            Glosario de Marca
+          </span>
+          <h3 className={`font-serif text-3xl md:text-4xl ${darkMode ? "text-paper-cream" : "text-ink-black"}`}>
+            Términos y Conceptos Clave
+          </h3>
+          <p className={`max-w-2xl text-sm md:text-base ${darkMode ? "text-paper-cream/70" : "text-on-surface-variant"}`}>
+            Definiciones y directrices conceptuales para comprender la profundidad lingüística, el rigor estratégico y la identidad filosófica de Anclora Insights.
+          </p>
+        </div>
+
+        {/* Search & Filter Bar */}
+        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+          {/* Search Box */}
+          <div className="relative w-full md:max-w-md">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 pointer-events-none">
+              <Search className="w-4 h-4 text-metallic-gold/60" />
+            </span>
+            <input
+              type="text"
+              placeholder="Buscar término o definición..."
+              value={glossarySearch}
+              onChange={(e) => setGlossarySearch(e.target.value)}
+              className={`w-full pl-10 pr-4 py-2.5 rounded-lg text-xs font-sans border outline-none transition-all duration-300 ${
+                darkMode
+                  ? "bg-[#0F172A] border-metallic-gold/20 text-paper-cream focus:border-metallic-gold/60 placeholder:text-stone-500"
+                  : "bg-white border-metallic-gold/25 text-ink-black focus:border-metallic-gold placeholder:text-stone-400"
+              }`}
+            />
+          </div>
+
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
+            {glossaryCategories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setSelectedGlossaryCategory(category)}
+                className={`px-3 py-1.5 rounded-md text-[10px] font-sans font-bold uppercase tracking-wider transition-all duration-300 border cursor-pointer ${
+                  selectedGlossaryCategory === category
+                    ? darkMode
+                      ? "bg-metallic-gold text-ink-black border-metallic-gold"
+                      : "bg-ink-black text-metallic-gold border-metallic-gold/40"
+                    : darkMode
+                      ? "bg-transparent border-metallic-gold/15 text-stone-400 hover:border-metallic-gold/30 hover:text-stone-300"
+                      : "bg-white border-metallic-gold/15 text-stone-500 hover:border-metallic-gold/30 hover:text-stone-700"
+                }`}
+              >
+                {category === "all" ? "Todos" : category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Accordion Grid / List */}
+        <div className="space-y-4 max-w-4xl">
+          <AnimatePresence mode="popLayout">
+            {filteredGlossaryItems.length > 0 ? (
+              filteredGlossaryItems.map((item) => {
+                const isExpanded = !!expandedGlossaryItems[item.term];
+                return (
+                  <motion.div
+                    key={item.term}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.3 }}
+                    className={`border rounded-xl overflow-hidden transition-all duration-300 ${
+                      isExpanded
+                        ? darkMode
+                          ? "border-metallic-gold bg-slate-950/30"
+                          : "border-metallic-gold bg-amber-500/5"
+                        : darkMode
+                          ? "border-metallic-gold/15 bg-[#0F172A]/40 hover:border-metallic-gold/35"
+                          : "border-metallic-gold/10 bg-white hover:border-metallic-gold/25"
+                    }`}
+                  >
+                    {/* Trigger Bar */}
+                    <button
+                      onClick={() => toggleGlossaryItem(item.term)}
+                      className="w-full px-6 py-4 flex items-center justify-between text-left gap-4 cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`p-1.5 rounded-md ${
+                          isExpanded
+                            ? "bg-metallic-gold/10 text-metallic-gold"
+                            : "bg-stone-500/5 text-stone-400"
+                        }`}>
+                          <BookMarked className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <span className={`font-serif text-base font-semibold block transition-colors duration-300 ${
+                            isExpanded ? "text-metallic-gold" : darkMode ? "text-paper-cream" : "text-ink-black"
+                          }`}>
+                            {item.term}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-3">
+                        <span className={`text-[9px] font-sans font-bold uppercase tracking-wider px-2 py-0.5 rounded border ${
+                          darkMode
+                            ? "border-metallic-gold/15 bg-metallic-gold/5 text-metallic-gold/80"
+                            : "border-metallic-gold/20 bg-amber-500/5 text-muted-gold"
+                        }`}>
+                          {item.category}
+                        </span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4 text-metallic-gold shrink-0" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4 text-stone-400 shrink-0" />
+                        )}
+                      </div>
+                    </button>
+
+                    {/* Collapsible Content */}
+                    <AnimatePresence initial={false}>
+                      {isExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.25, ease: "easeInOut" }}
+                        >
+                          <div className={`px-6 pb-5 pt-1 border-t ${
+                            darkMode ? "border-metallic-gold/10" : "border-metallic-gold/5"
+                          }`}>
+                            <p className={`font-sans text-xs md:text-sm leading-relaxed pl-8 border-l-2 border-metallic-gold/40 py-1 ${
+                              darkMode ? "text-paper-cream/80" : "text-stone-700"
+                            }`}>
+                              {item.definition}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                );
+              })
+            ) : (
+              <motion.div
+                layout
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`p-12 border border-dashed rounded-xl text-center space-y-3 ${
+                  darkMode ? "border-metallic-gold/20 text-stone-500" : "border-stone-200 text-stone-400"
+                }`}
+              >
+                <BookMarked className="w-8 h-8 mx-auto opacity-40 text-metallic-gold" />
+                <p className="font-serif text-sm italic">"Ningún término coincide con su búsqueda en nuestros registros."</p>
+                <button
+                  onClick={() => { setGlossarySearch(""); setSelectedGlossaryCategory("all"); }}
+                  className="text-xs text-metallic-gold font-sans font-bold uppercase tracking-wider hover:underline"
+                >
+                  Restablecer Filtros
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
