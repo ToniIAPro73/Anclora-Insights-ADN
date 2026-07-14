@@ -1,32 +1,47 @@
 # Anclora Insights: Business DNA Portal
 
-> **Sello Editorial de Alta Autoridad** | Transformando el conocimiento en experiencias intelectuales de excelencia
+> **Sello Editorial de Alta Autoridad** | Transformando el conocimiento en
+> experiencias intelectuales de excelencia
 
 ## Visión
 
-Anclora Insights es un portal inteligente diseñado para arquitectos de marca y líderes estratégicos que demandan rigor, elegancia y profundidad en la definición de su identidad corporativa. Combinamos curaduría extrema, inteligencia artificial avanzada y diseño de lujo para crear experiencias que elevan el conocimiento a su máxima expresión.
+Anclora Insights es un portal inteligente diseñado para arquitectos de marca y
+líderes estratégicos que demandan rigor, elegancia y profundidad en la definición
+de su identidad corporativa. Combinamos curaduría extrema, inteligencia
+artificial avanzada y diseño de lujo para crear experiencias que elevan el
+conocimiento a su máxima expresión.
 
 ## Características Distintivas
 
 ### 🧬 **Business DNA**
 
-Descubre los pilares fundamentales de tu marca: Curaduría Extrema, Rigor Intelectual, Tactilidad Digital y Exclusividad Premium. Generamos arquitecturas conceptuales que transforman la visión estratégica en narrativas cohesivas.
+Descubre los pilares fundamentales de tu marca: Curaduría Extrema, Rigor
+Intelectual, Tactilidad Digital y Exclusividad Premium. Generamos arquitecturas
+conceptuales que transforman la visión estratégica en narrativas cohesivas.
 
 ### 📘 **Brand Book Premium**
 
-Crea memoriales editoriales de tu marca con la elegancia de una publicación de lujo. Diseño responsivo, tipografía refinada y narrativas estructuradas para comunicar tu identidad con autoridad.
+Crea memoriales editoriales de tu marca con la elegancia de una publicación de
+lujo. Diseño responsivo, tipografía refinada y narrativas estructuradas para
+comunicar tu identidad con autoridad.
 
 ### ✍️ **Editorial Assistant**
 
-Asistente de contenido impulsado por IA que garantiza coherencia narrativa y excelencia lingüística. Perfecciona tu voz de marca con sugerencias que respetan tu identidad única.
+Asistente de contenido impulsado por IA que garantiza coherencia narrativa y
+excelencia lingüística. Perfecciona tu voz de marca con sugerencias que respetan
+tu identidad única.
 
 ### 🎨 **Contrast Checker**
 
-Verifica la legibilidad y accesibilidad de tu paleta de marca. Nuestras herramientas garantizan que cada combinación de colores cumple con estándares de accesibilidad WCAG.
+Verifica la legibilidad y accesibilidad de tu paleta de marca. Nuestras
+herramientas garantizan que cada combinación de colores cumple con estándares
+de accesibilidad WCAG.
 
 ### 📋 **Print Brand Guidelines**
 
-Exporta tus directrices de marca en PDF de alta fidelidad, listos para impresión y distribución. Cada documento refleja el nivel de excelencia que define a Anclora Group.
+Exporta tus directrices de marca en PDF de alta fidelidad, listos para impresión
+y distribución. Cada documento refleja el nivel de excelencia que define a
+Anclora Group.
 
 ---
 
@@ -59,7 +74,9 @@ GEMINI_API_KEY=tu_clave_api_gemini_aqui
 npm run dev
 ```
 
-La aplicación estará disponible en `http://localhost:5173`
+La aplicación estará disponible en `http://localhost:3000`.
+Antes de arrancar, el comando libera automáticamente cualquier proceso que esté
+escuchando en ese puerto.
 
 ### 4. Construcción para Producción
 
@@ -116,7 +133,7 @@ Cada elemento de Anclora Insights refleja nuestro compromiso con:
 ### Comandos Disponibles
 
 ```bash
-npm run dev      # Inicia servidor de desarrollo
+npm run dev      # Libera el puerto 3000 e inicia el servidor de desarrollo
 npm run build    # Construye para producción
 npm run start    # Inicia aplicación en producción
 npm run clean    # Limpia artefactos de build
@@ -139,7 +156,8 @@ refactor: Reorganizar código sin cambiar funcionalidad
 
 ## Contribuciones
 
-Anclora Insights es una expresión de excelencia. Las contribuciones deben mantener este estándar de calidad, elegancia y rigor intelectual.
+Anclora Insights es una expresión de excelencia. Las contribuciones deben
+mantener este estándar de calidad, elegancia y rigor intelectual.
 
 ---
 
@@ -149,4 +167,5 @@ Copyright © 2026 Anclora Group. Todos los derechos reservados.
 
 ---
 
-**Diseñado para líderes que entienden que la verdadera autoridad requiere profundidad, tiempo y verdad inalterable.**
+**Diseñado para líderes que entienden que la verdadera autoridad requiere
+profundidad, tiempo y verdad inalterable.**
