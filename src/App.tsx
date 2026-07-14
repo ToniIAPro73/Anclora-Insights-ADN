@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Moon, Sun, BookOpen, Compass, Award, Sparkles, Shield, ArrowUpRight, HelpCircle } from "lucide-react";
+import { Moon, Sun, BookOpen, Sparkles, Shield } from "lucide-react";
 import BusinessDNA from "./components/BusinessDNA";
 import BrandBook from "./components/BrandBook";
 import EditorialAssistant from "./components/EditorialAssistant";
@@ -10,6 +10,12 @@ import PrintBrandGuidelines from "./components/PrintBrandGuidelines";
 export default function App() {
   const [darkMode, setDarkMode] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<"dna" | "brandbook" | "assistant" | "legibilidad">("dna");
+  const tabs = [
+    { id: "dna", label: "ADN de Negocio" },
+    { id: "brandbook", label: "Brand Book & Manual" },
+    { id: "assistant", label: "Asistente Editorial AI" },
+    { id: "legibilidad", label: "Auditoría de Legibilidad" }
+  ] as const;
 
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -145,15 +151,10 @@ export default function App() {
         <div className={`p-1 border-b flex overflow-x-auto gap-4 scrollbar-none sticky top-20 z-30 backdrop-blur-sm ${
           darkMode ? "border-metallic-gold/10" : "border-metallic-gold/15"
         }`}>
-          {[
-            { id: "dna", label: "ADN de Negocio" },
-            { id: "brandbook", label: "Brand Book & Manual" },
-            { id: "assistant", label: "Asistente Editorial AI" },
-            { id: "legibilidad", label: "Auditoría de Legibilidad" }
-          ].map((tab) => (
+          {tabs.map((tab) => (
             <motion.button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id)}
               whileHover={{ scale: 1.03, y: -1 }}
               whileTap={{ scale: 0.98 }}
               transition={{ type: "spring", stiffness: 500, damping: 20 }}

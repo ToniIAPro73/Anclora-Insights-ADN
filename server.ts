@@ -6,6 +6,12 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+interface EditorialAssistantRequest {
+  prompt?: string;
+  type?: "rewrite" | "generate" | "book-summary";
+  textToAdapt?: string;
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -35,7 +41,7 @@ async function startServer() {
   // API endpoint for AI brand companion
   app.post("/api/editorial-assistant", async (req, res) => {
     try {
-      const { prompt, type, textToAdapt } = req.body;
+      const { prompt = "", type, textToAdapt = "" } = req.body as EditorialAssistantRequest;
       const client = getGeminiClient();
 
       const systemInstruction = `
@@ -74,9 +80,10 @@ When responding:
       });
 
       res.json({ text: response.text });
-    } catch (error: any) {
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Internal Server Error";
       console.error("Gemini API Error:", error);
-      res.status(500).json({ error: error.message || "Internal Server Error" });
+      res.status(500).json({ error: message });
     }
   });
 
@@ -90,7 +97,7 @@ When responding:
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
-    app.get("*", (req, res) => {
+    app.get("*", (_req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
   }

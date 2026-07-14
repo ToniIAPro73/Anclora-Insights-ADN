@@ -47,9 +47,9 @@ const logoVariations: LogoVariation[] = [
     id: "main-lockup",
     name: "Logo Lockup Principal",
     description: "La combinación horizontal de nuestro sello 'Medalla' y la tipografía serif elegante. Perfectamente equilibrado.",
-    url: "https://lh3.googleusercontent.com/aida-public/AB6AXuDu3KOkKiYeyBkudz0L5FKJe6E0aFx1_-fCBe133nCbxyyq34r9l-YqzF26t1iCrlGSOhEZTMlUX0zgqnYTDGQGlGbR4KThmHFncRKGmZuowFwoj5OBVGCnhR84FoEnFhMiOSzEta3lOy7EhIMZLbnbhnwViLIIz__ehnWUSYiKhjgy3-yRVqkG6bCMbCkfnpWZr6dOu8zzbwz-T83j80GQn7jgj-ArE4uTXr3Qczh5btQfuSBos6dr7zfnEinZsa3ln7lEJmcVTfLZ",
+    url: "/assets/anclora-insights-lockup-oro-transparente.png",
     recommendedUse: "Cabeceras de sitios web, portadas de informes, material de prensa oficial y papelería corporativa premium.",
-    bgColorClass: "bg-white border border-metallic-gold/10"
+    bgColorClass: "dynamic"
   },
   {
     id: "gold-medal",
@@ -246,7 +246,24 @@ export default function BrandBook({ darkMode }: BrandBookProps) {
                style={{ borderColor: darkMode ? "rgba(224, 176, 100, 0.15)" : "rgba(224, 176, 100, 0.12)" }}>
             
             {/* Visual Canvas */}
-            <div className={`flex-1 p-12 md:p-16 flex items-center justify-center transition-colors duration-500 ${activeLogoData.bgColorClass}`}>
+            <div className={`flex-1 p-12 md:p-16 flex items-center justify-center transition-colors duration-500 relative overflow-hidden ${
+              activeLogoData.bgColorClass === "dynamic"
+                ? darkMode
+                  ? "bg-gradient-to-br from-ink-black via-ink-black to-ink-black/70"
+                  : "bg-gradient-to-br from-paper-cream via-paper-cream to-[#f5f3f0]"
+                : activeLogoData.bgColorClass
+            }`}>
+              {/* Decorative elements for dynamic backgrounds */}
+              {activeLogoData.bgColorClass === "dynamic" && (
+                <div className={`absolute inset-0 opacity-20 pointer-events-none ${
+                  darkMode ? "bg-radial-gold" : "bg-radial-subtle"
+                }`} style={{
+                  background: darkMode 
+                    ? "radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.1) 0%, transparent 70%)"
+                    : "radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 70%)"
+                }} />
+              )}
+              
               <motion.img
                 key={activeLogoData.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -254,11 +271,15 @@ export default function BrandBook({ darkMode }: BrandBookProps) {
                 transition={{ duration: 0.5 }}
                 alt={activeLogoData.name}
                 src={activeLogoData.url}
-                className="max-h-40 md:max-h-48 object-contain drop-shadow-sm select-none"
+                className={`max-h-40 md:max-h-48 object-contain select-none relative z-10 transition-all duration-500 ${
+                  activeLogoData.bgColorClass === "dynamic"
+                    ? darkMode
+                      ? "drop-shadow-[0_10px_30px_rgba(245,158,11,0.15)]"
+                      : "drop-shadow-[0_5px_15px_rgba(15,23,42,0.08)]"
+                    : "drop-shadow-md"
+                }`}
               />
             </div>
-
-            {/* Visual Parameters Table */}
             <div className={`p-6 md:p-8 border-t ${
               darkMode ? "bg-[#0F172A] border-metallic-gold/15 text-paper-cream" : "bg-white border-metallic-gold/10 text-ink-black"
             }`}>

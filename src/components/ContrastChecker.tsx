@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CheckCircle2, XCircle, RefreshCw, Layers } from "lucide-react";
+import { CheckCircle2, XCircle, RefreshCw } from "lucide-react";
 
 interface ContrastCheckerProps {
   darkMode: boolean;
@@ -26,7 +26,7 @@ export default function ContrastChecker({ darkMode }: ContrastCheckerProps) {
 
   function getRGB(hex: string) {
     let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-    let fullHex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    let fullHex = hex.replace(shorthandRegex, (_match, r, g, b) => r + r + g + g + b + b);
     let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
     return result
       ? {

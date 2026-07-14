@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "motion/react";
-import { BookOpen, Compass, ShieldCheck, Award, Eye, Heart, Feather, Download } from "lucide-react";
+import { BookOpen, Compass, Award, Eye, Feather, Download } from "lucide-react";
 import { BrandPillar } from "../types";
 import { generateBrandGuidelinesPDF } from "../lib/pdfGenerator";
 
@@ -38,15 +38,22 @@ const pillars: BrandPillar[] = [
 export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationProgress, setGenerationProgress] = useState("");
+  const [generationError, setGenerationError] = useState("");
 
   const handleDownloadPDF = async () => {
     try {
       setIsGenerating(true);
+      setGenerationError("");
       await generateBrandGuidelinesPDF((progressText) => {
         setGenerationProgress(progressText);
       });
     } catch (error) {
       console.error("Error generating PDF:", error);
+      setGenerationError(
+        error instanceof Error
+          ? error.message
+          : "No se pudo generar el PDF. Revisa la consola para más detalle."
+      );
     } finally {
       setIsGenerating(false);
       setGenerationProgress("");
@@ -120,6 +127,12 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
           {isGenerating && (
             <span className="text-[11px] font-mono text-metallic-gold animate-pulse">
               Compilando tipografías, vectores y colores del manual...
+            </span>
+          )}
+
+          {generationError && (
+            <span className="max-w-md text-center text-[11px] font-mono text-red-500">
+              {generationError}
             </span>
           )}
         </div>

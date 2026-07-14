@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { Sparkles, ArrowRight, Copy, Check, Feather, FileText, AlertCircle, RefreshCw } from "lucide-react";
+import { Sparkles, Copy, Check, Feather, FileText, AlertCircle, RefreshCw } from "lucide-react";
 
 interface EditorialAssistantProps {
   darkMode: boolean;
@@ -26,7 +26,7 @@ export default function EditorialAssistant({ darkMode }: EditorialAssistantProps
 
   // Rotate messages during load
   useEffect(() => {
-    let interval: any;
+    let interval: ReturnType<typeof setInterval> | undefined;
     if (isLoading) {
       interval = setInterval(() => {
         setCurrentMessageIdx((prev) => (prev + 1) % loadingMessages.length);
@@ -67,9 +67,13 @@ export default function EditorialAssistant({ darkMode }: EditorialAssistantProps
       }
 
       setOutputText(data.text || "");
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setErrorMsg(err.message || "No se pudo conectar con el servidor. Verifica que el servidor de desarrollo esté corriendo.");
+      setErrorMsg(
+        err instanceof Error
+          ? err.message
+          : "No se pudo conectar con el servidor. Verifica que el servidor de desarrollo esté corriendo."
+      );
     } finally {
       setIsLoading(false);
     }

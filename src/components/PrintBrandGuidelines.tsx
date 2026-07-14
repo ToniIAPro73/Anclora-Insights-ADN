@@ -1,4 +1,4 @@
-import { BookOpen, Compass, Award, Feather, Eye, Shield } from "lucide-react";
+import { BookOpen, Compass, Award, Feather, Eye } from "lucide-react";
 
 interface PrintBrandGuidelinesProps {
   idPrefix?: string;
@@ -25,13 +25,16 @@ export default function PrintBrandGuidelines({ idPrefix = "print-page" }: PrintB
   return (
     <div 
       style={{ 
-        position: "absolute", 
-        left: "-9999px", 
-        top: "-9999px", 
-        zIndex: -100, 
-        pointerEvents: "none" 
+        position: "fixed",
+        left: 0,
+        top: 0,
+        width: "800px",
+        height: "1131px",
+        overflow: "hidden",
+        zIndex: -1,
+        pointerEvents: "none"
       }}
-      className="bg-stone-100 p-4"
+      aria-hidden="true"
     >
       {/* PAGE 1: COVER PAGE (Elegant Dark Slate) */}
       <div 
