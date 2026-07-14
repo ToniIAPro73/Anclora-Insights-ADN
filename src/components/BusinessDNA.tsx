@@ -101,7 +101,7 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
                 ? "bg-stone-800 text-stone-500 border-stone-700 cursor-not-allowed"
                 : darkMode
                   ? "bg-metallic-gold text-ink-black border-metallic-gold hover:bg-muted-gold"
-                  : "bg-ink-black text-metallic-gold border-metallic-gold/30 hover:bg-[#0F172A]"
+                  : "bg-ink-black text-metallic-gold border-metallic-gold/30 hover:bg-ink-black"
             }`}
           >
             {isGenerating ? (
@@ -135,7 +135,7 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
           transition={{ duration: 0.8 }}
           className={`p-8 md:p-12 border rounded-xl relative overflow-hidden group flex flex-col justify-between ${
             darkMode 
-              ? "bg-[#0F172A] border-metallic-gold/20 hover:border-metallic-gold/40" 
+              ? "bg-ink-black border-metallic-gold/20 hover:border-metallic-gold/40" 
               : "bg-white border-metallic-gold/15 hover:border-metallic-gold/30"
           } transition-all duration-300 shadow-sm`}
         >
@@ -171,7 +171,7 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
           transition={{ duration: 0.8 }}
           className={`p-8 md:p-12 border rounded-xl relative overflow-hidden group flex flex-col justify-between ${
             darkMode 
-              ? "bg-[#0F172A] border-metallic-gold/20 hover:border-metallic-gold/40" 
+              ? "bg-ink-black border-metallic-gold/20 hover:border-metallic-gold/40" 
               : "bg-white border-metallic-gold/15 hover:border-metallic-gold/30"
           } transition-all duration-300 shadow-sm`}
         >
@@ -244,7 +244,7 @@ export default function BusinessDNA({ darkMode }: BusinessDNAProps) {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.15 }}
               className={`p-8 border rounded-xl relative ${
-                darkMode ? "bg-[#0F172A]/80 border-metallic-gold/15" : "bg-white border-metallic-gold/10"
+                darkMode ? "bg-ink-black/80 border-metallic-gold/15" : "bg-white border-metallic-gold/10"
               } hover:shadow-md transition-all duration-300 flex flex-col justify-between h-full`}
             >
               <div className="space-y-4">

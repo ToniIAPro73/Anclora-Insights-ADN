@@ -60,7 +60,7 @@ export default function App() {
               title={darkMode ? "Cambiar a modo papel claro" : "Cambiar a modo cósmico oscuro"}
               className={`w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 border cursor-pointer ${
                 darkMode 
-                  ? "border-metallic-gold/20 bg-[#0F172A] text-metallic-gold hover:bg-black/30" 
+                  ? "border-metallic-gold/20 bg-ink-black text-metallic-gold hover:bg-black/30" 
                   : "border-metallic-gold/30 bg-white text-muted-gold hover:bg-[#fbf9f5] shadow-sm"
               }`}
             >
@@ -71,7 +71,7 @@ export default function App() {
       </header>
 
       {/* Main Container */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+      <main className="grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
         
         {/* Dynamic Editorial Hero Board */}
         <motion.div 
@@ -80,7 +80,7 @@ export default function App() {
           transition={{ duration: 0.7 }}
           className={`relative border rounded-2xl overflow-hidden p-8 md:p-12 lg:p-16 flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12 ${
             darkMode 
-              ? "bg-[#0F172A]/60 border-metallic-gold/15" 
+              ? "bg-ink-black/60 border-metallic-gold/15" 
               : "bg-white border-metallic-gold/15 shadow-sm"
           }`}
         >
@@ -120,7 +120,7 @@ export default function App() {
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className={`px-5 py-2.5 text-xs font-sans font-semibold uppercase tracking-wider rounded border transition-colors cursor-pointer ${
                   darkMode 
-                    ? "border-metallic-gold/30 hover:bg-[#0F172A]" 
+                    ? "border-metallic-gold/30 hover:bg-ink-black" 
                     : "border-metallic-gold/40 hover:bg-stone-50"
                 }`}
               >
