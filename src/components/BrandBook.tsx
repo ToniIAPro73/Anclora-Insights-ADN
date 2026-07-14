@@ -270,7 +270,11 @@ export default function BrandBook({ darkMode }: BrandBookProps) {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5 }}
                 alt={activeLogoData.name}
-                src={activeLogoData.url}
+                src={
+                  activeLogoData.id === "main-lockup" && !darkMode
+                    ? "/assets/anclora-insights-lockup-light-transparente.png"
+                    : activeLogoData.url
+                }
                 className={`max-h-40 md:max-h-48 object-contain select-none relative z-10 transition-all duration-500 ${
                   activeLogoData.bgColorClass === "dynamic"
                     ? darkMode
